@@ -6,6 +6,8 @@ Paradigme de Programare - UPB 2019
 
 - Lab1 (**Racket**): introducere
 
+- Lab1 (**Racket**): stiva vs coada
+
 ## Teme
 
 - ???
