@@ -13,3 +13,7 @@
 - accent pus pe recursivitate
 
 - se analizeaza diferentele dintre recursivitatea pe stiva si cea pe coada
+
+## Lab3 (Racket)
+
+- se reiau exercitiile din [laboratorul 2](https://elf.cs.pub.ro/pp/19/laboratoare/racket/recursivitate) folosind fonctionale

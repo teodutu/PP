@@ -6,7 +6,9 @@ Paradigme de Programare - UPB 2019
 
 - Lab1 (**Racket**): introducere
 
-- Lab2 (**Racket**): stiva vs coada
+- Lab2 (**Racket**): recursivitate pe stiva vs coada
+
+- Lab3 (**Racket**): functionale
 
 ## Teme
 
