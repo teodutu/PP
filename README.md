@@ -10,6 +10,8 @@ Paradigme de Programare - UPB 2019
 
 - Lab3 (**Racket**): functionale
 
+- Lab3 (**Racket**): inchideri functionale si variable
+
 ## Teme
 
 - ???

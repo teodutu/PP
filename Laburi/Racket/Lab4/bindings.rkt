@@ -162,9 +162,7 @@
 ;; Hint:: Uitați-vă peste splitf-at.
 
 (define (sum-list L) 
-  (if (null? L)
-      0
-      (+ (car L) (sum-list (cdr L)))))
+  (apply + L))
 
 (define (3-sequence-max numbers separator)
   (let*-values (((split) (λ (x) (not (= x separator))))

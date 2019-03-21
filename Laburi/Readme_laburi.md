@@ -17,3 +17,7 @@
 ## Lab3 (Racket)
 
 - se reiau exercitiile din [laboratorul 2](https://elf.cs.pub.ro/pp/19/laboratoare/racket/recursivitate) folosind fonctionale
+
+## Lab4 (Racket)
+
+- legari de variabile si inchideri functionale (in mare parte in contexte inutile)
