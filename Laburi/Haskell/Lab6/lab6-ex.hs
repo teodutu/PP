@@ -217,7 +217,14 @@ Funcția "prettyPrint" este utilă pentru vizualizarea rezultatului în forma de
 
 -}
 diamond :: Char -> [String]
-diamond ch = undefined
+diamond ch = let downHalf = down ch
+             in (reverse (tail downHalf)) ++ downHalf
+
+down :: Char -> [String]
+down 'A' = ["A"]
+down 'B' = "B B" :  (map (\line -> " " ++ line ++ " ") (down (pred 'B')))
+down ch = let prevDown = down (pred ch)
+          in (ch : ' ' : (tail (init (head prevDown))) ++ ' ' : ch : []) : map (\line -> " " ++ line ++ " ") prevDown
 
 prettyPrint ch = mapM_ print (diamond ch)
 
