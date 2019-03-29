@@ -222,9 +222,9 @@ diamond ch = let downHalf = down ch
 
 down :: Char -> [String]
 down 'A' = ["A"]
-down 'B' = "B B" :  (map (\line -> " " ++ line ++ " ") (down (pred 'B')))
-down ch = let prevDown = down (pred ch)
-          in (ch : ' ' : (tail (init (head prevDown))) ++ ' ' : ch : []) : map (\line -> " " ++ line ++ " ") prevDown
+down 'B' = ["B B", " A "]
+down ch = (ch : ' ' : (tail (init (head prevDown))) ++ ' ' : ch : []) : map (\line -> " " ++ line ++ " ") prevDown
+           where prevDown = down (pred ch)
 
 prettyPrint ch = mapM_ print (diamond ch)
 
