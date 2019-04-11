@@ -117,10 +117,9 @@ test4 :: TestPP ()
 test4 = testOne 4 $ testVal (map wordToAlpha [0..255]) (take 256 $ cycle ['a'..'z']) "wordToAlpha" 1
 
 wordToAlpha :: Word8 -> Char
-wordToAlpha x = chr $ base + idx
+wordToAlpha x = chr $ ord 'a' + index
   where
-    base = ord 'a'
-    idx  = fromIntegral $ x `mod` 26
+    index = fromIntegral $ mod x 26
 
 
 {-
@@ -312,17 +311,17 @@ encryptVigenere clearText key = zipWith tableToFunc rotTables clearText
 -}
 
 xorNumbers :: Int -> Int -> Int                                                 
-xorNumbers a b = a `xor` b
+xorNumbers = xor
 
-xorStrings :: [Char] -> [Char] -> [Char]                                        
+xorStrings :: [Char] -> [Char] -> [Char]
 xorStrings a b = map chr $ zipWith xor (map ord long) (map ord expadedShort)
                  where
                    short
-                     |length a > length b = b
-                     |otherwise           = a
+                     | length a > length b = b
+                     | otherwise           = a
                    long
-                     |length a <= length b = b
-                     |otherwise            = a
+                     | length a <= length b = b
+                     | otherwise            = a
                    expadedShort = take (length long) (cycle short)
 
 test9 :: TestPP ()
