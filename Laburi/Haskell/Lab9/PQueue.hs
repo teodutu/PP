@@ -91,8 +91,8 @@ instance (Ord a) => PQueue ListPQ a where
 
     insert elem (LPQ pq)
       | null pq                   = LPQ [elem]
-      | fst elem >= fst (head pq) = LPQ (elem : pq)
-      | otherwise                 = LPQ (head pq : toList (insert elem (LPQ (tail pq))))
+      | fst elem >= fst (head pq) = LPQ $ elem : pq
+      | otherwise                 = LPQ $ head pq : toList (insert elem $ LPQ $ tail pq)
 
     top (LPQ pq)
       | null pq    = Nothing
@@ -146,15 +146,12 @@ data LeftistPQ a = Empty { rank :: Rank } |
 merge :: LeftistPQ a -> LeftistPQ a -> LeftistPQ a
 merge (Empty _) tree = tree
 merge tree (Empty _) = tree
-merge tree1 tree2
-  | fst (nodeVal tree1) <= fst (nodeVal tree2) = merge tree2 tree1
-  | rank (left tree1) >= rank mergedTree       = (Node (1 + rank mergedTree) val leftTree mergedTree)
-  | otherwise                                  = (Node (1 + rank leftTree) val mergedTree leftTree)
+merge tree1@(Node r1 (p1, val1) left1 right1) tree2@(Node _ (p2, _) _ _)
+  | p1 <= p2                      = merge tree2 tree1
+  | rank left1 >= rank mergedTree = (Node (1 + rank mergedTree) (p1, val1) left1 mergedTree)
+  | otherwise                     = (Node (1 + rank left1) (p1, val1) mergedTree left1)
     where
-      r          = rank tree1
-      val        = nodeVal tree1
-      leftTree   = left tree1
-      mergedTree = merge (right tree1) tree2
+      mergedTree = merge right1 tree2
 
 inorder :: LeftistPQ a -> [(Prio, a)]
 inorder (Empty _) = []
@@ -219,7 +216,7 @@ instance (Ord a) => PQueue LeftistPQ a where
     isEmpty (Empty _) = True
     isEmpty (Node _ _ _ _) = False
     
-    insert elem pq = merge (Node 1 elem empty empty) pq
+    insert elem = merge (Node 1 elem empty empty)
 
     top pq
       | isEmpty pq = Nothing
@@ -315,10 +312,10 @@ class MyFoldable f where
     foldr' :: (a -> b -> b) -> b -> f a -> b
 
 instance MyFoldable ListPQ where
-    foldr' f acc (LPQ pq) = foldr f acc $ map (\ elem -> snd elem) pq
+    foldr' f acc (LPQ pq) = foldr (\ elem -> f $ snd elem) acc pq
 
 instance MyFoldable LeftistPQ where
-    foldr' f acc pq = foldr (\ elem -> f (snd elem)) acc $ inorder pq
+    foldr' f acc = foldr (\ elem -> f $ snd elem) acc . inorder
 
 -- Test 7
 
@@ -362,10 +359,10 @@ class MyFunctor f where
     fmap' :: (Ord a, Ord b) => ((Prio, a)  -> (Prio, b)) -> f a -> f b
 
 instance MyFunctor ListPQ where
-    fmap' f pq = fromList $ map f $ toList pq
+    fmap' f = fromList . map f . toList
 
 instance MyFunctor LeftistPQ where
-    fmap' f pq = fromList $ map f $ inorder pq
+    fmap' f = fromList . map f . inorder
 
 -- Test 8
 
@@ -407,8 +404,9 @@ showLeftist :: (Show a) => String -> LeftistPQ a -> String
 showLeftist dashes (Empty _) = dashes ++ "empty\n"
 showLeftist dashes (Node _ val left right) = dashes ++ (show val) ++ "\n" ++ leftShow ++ rightShow
   where
-    leftShow = (showLeftist (dashes ++ "--") left)
-    rightShow = (showLeftist (dashes ++ "--") right)
+    leftShow = (showLeftist newDashes left)
+    rightShow = (showLeftist newDashes right)
+    newDashes = dashes ++ "--"
 
 instance (Show a) => Show (LeftistPQ a) where
     show = showLeftist "--"
