@@ -214,7 +214,7 @@ instance (Ord a) => PQueue LeftistPQ a where
     empty = Empty 0
 
     isEmpty (Empty _) = True
-    isEmpty (Node _ _ _ _) = False
+    isEmpty _ = False
     
     insert elem = merge (Node 1 elem empty empty)
 
@@ -359,7 +359,7 @@ class MyFunctor f where
     fmap' :: (Ord a, Ord b) => ((Prio, a)  -> (Prio, b)) -> f a -> f b
 
 instance MyFunctor ListPQ where
-    fmap' f = fromList . map f . toList
+    fmap' f (LPQ pq) = fromList $  map f pq
 
 instance MyFunctor LeftistPQ where
     fmap' f = fromList . map f . inorder
