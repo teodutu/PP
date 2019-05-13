@@ -316,8 +316,8 @@ chldDfs([C | Chld], Vis, P) :- arc(C, CChld),
 % bfs(+Q, +Vis, -Path)
 bfs([], _, Path) :- Path = [].
 bfs([N | Q], Vis, P) :- \+ arc(N, _), bfs(Q, [N | Vis], Pold), P = [N | Pold].
-bfs([N | Q], Vis, P) :- arc(N, X), append(Q, X, Qnew),
-                        bfs(Qnew, [N | Vis], Pold), P = [N | Pold].
+bfs([N | Q], Vis, P) :- arc(N, X), append(Q, X, NewQ),
+                        bfs(NewQ, [N | Vis], Pold), P = [N | Pold].
 
 check3 :- tests([
           exp('preorder(a, P)', ['P', [a, b, c, e, f, g, d]]),
@@ -399,29 +399,6 @@ spanTraverse(NN, Visited, Trees) :- member(X, NN), \+ member(X, Visited),
                                     sort(NewVis, SNewVis),
                                     spanTraverse(NN, SNewVis, NewTrees),
                                     Trees = [Tree | NewTrees].
-
-%% dfs(CrtN, [], Vis, [CrtN | Vis], [CrtN]) :- \+ member(CrtN, Vis), !.
-%% dfs(CrtN, [], Vis, [Vis], []).
-%% dfs(CrtN, [Chld], Vis, )
-
-%spanPreorder(NN, N, Vis, NewVis, Tree) :- member(N, NN), edges(N, _),
-%                                          spanDfs(NN, N, Vis, ChldVis, Tree),
-%                                          NewVis = ChldVis.
-%spanPreorder(NN, N, _, NewVis, Tree) :- member(N, NN), \+ edges(N, _), Tree = [N],
-%                                        NewVis = [N].
-
-%spanDfs(NN, N, Vis, NewVis, T) :-member(N, NN), \+ edges(N, _), T = [], NewVis = Vis.
-%spanDfs(NN, N, Vis, NewVis, T) :- member(N, NN), edges(N, Chld),
-%                                  findall([C, TC]/ChldVis, (member(C, Chld), \+ member(C, Vis),
-%                                  spanDfs(NN, C, [C | Vis], ChldVis, TC)), TChld/NewVis),
-%                                  T = [C | TChld].
-
-%spanTraverse(NN, NN, Trees) :- Trees = [].
-%spanTraverse(NN, Visited, Trees) :- member(X, NN), \+ member(X, Visited),
-%                                    spanPreorder(NN, X, Visited, PreVis, Tree),
-%                                    sort(PreVis, NewVis),
-%                                    spanTraverse(NN, NewVis, NewTrees),
-%                                    Trees = [Tree | NewTrees].
 
 check5 :- tests([
           exp('span(Trees)', ['Trees', [[1,[2],[10]],[3,[5,[6,[9]],[8]]],[4,[7]]]])
