@@ -17,7 +17,7 @@ template([1/1/_, 1/2/_, 1/3/_, 2/1/_, 2/2/_, 2/3/_, 3/1/_, 3/2/_, 3/3/_]).
 %% correct(?Solution)
 %% Solution reprezintă o soluție validă pentru problemă.
 correct([]):-!.
-correct([X/Y/S|Others]):-
+correct([X/Y/S | Others]):-
         correct(Others),
         member(S, [a, b, c]),
         once(safe(X/Y/S, Others)).
@@ -25,7 +25,7 @@ correct([X/Y/S|Others]):-
 %% solve_latin/1
 %% solve_latin(-Solution)
 %% Solution este o soluție a problemei pătratului latin.
-solve_latin(S):-template(S), correct(S).
+solve_latin(S) :- template(S), correct(S).
 
 %% Scrieți predicatul safe/2 utilizat în rezolvarea problemei.
 %% Predicatul verifică dacă plasarea simbolului S pe coloana X
@@ -36,8 +36,8 @@ solve_latin(S):-template(S), correct(S).
 %% safe/2
 %% safe(+X/Y/S, +Others)
 safe(_, []) :- !.
-safe(X/Y/S, [A/B/C | Others]) :- ((S\==C) ; ((S == C), X \== A, Y \== B)),
-                                    safe(X/Y/S, Others).
+safe(X/Y/S, [A/B/C | Others]) :- (S \== C; (S == C, X \== A, Y \== B)),
+                                 safe(X/Y/S, Others).
 check1 :- tests([
               uck(safe(1/1/a, [1/3/a])),
               uck(safe(1/2/b, [3/2/b])),
@@ -66,19 +66,13 @@ exercitiul(2, [6, puncte]).
 %% next_state/3. fiecare dintre predicate ia ca prim argument problema
 %% pe care o rezolvăm.
 
-search(Pb, [CurrentState|Other], Solution) :-
-        final_state(Pb, CurrentState),
-        !,
-        reverse([CurrentState|Other], Solution).
+search(Pb, [CrtState | Other], Sol) :- final_state(Pb, CrtState), !,
+                                       reverse([CrtState | Other], Sol).
+search(Pb, [CrtState | Other], Sol) :- next_state(Pb, CrtState, NextState),
+                                       \+ member(NextState, Other),
+                                       search(Pb, [NextState, CrtState | Other], Sol).
 
-search(Pb, [CurrentState|Other], Solution) :-
-        next_state(Pb, CurrentState, NextState),
-        \+ member(NextState, Other),
-        search(Pb, [NextState,CurrentState|Other], Solution).
-
-solve(Pb, Solution):-
-        initial_state(Pb, State),
-        search(Pb, [State], Solution).
+solve(Pb, Sol) :- initial_state(Pb, State), search(Pb, [State], Sol).
 
 %% Exemplu: problema țăranului, a lupului, a caprei și a verzei.
 %% Vom reprezenta o stare astfel:
@@ -307,14 +301,13 @@ arc(n, [o, p]). arc(o, [q, r, s]). arc(p, [t, u, v]).
 % preorder(+N, -Parc)
 % Întoarce în Parc o listă de noduri rezultate din parcurgerea în
 % preordine începând din noudl N.
-preorder(N, P) :- nod(N), arc(N, Chld),
-                  chldDfs(Chld, [], PChld), P = [N | PChld].
-preorder(N, P) :- nod(N), \+ arc(N, _), P = [N].
+preorder(N, [N | PChld]) :- arc(N, Chld), chldDfs(Chld, [], PChld).
+preorder(N, [N]) :- \+ arc(N, _).
 
 chldDfs([], Vis, P) :- reverse(Vis, P).
-chldDfs([C | Chld], Vis, P) :- nod(C), \+ arc(C, _),
+chldDfs([C | Chld], Vis, P) :- \+ arc(C, _),
                                chldDfs(Chld, [C | Vis], P).
-chldDfs([C | Chld], Vis, P) :- nod(C), arc(C, CChld),
+chldDfs([C | Chld], Vis, P) :- arc(C, CChld),
                                chldDfs(CChld, [C | Vis], PChld),
                                reverse(PChld, VisChld),
                                chldDfs(Chld, VisChld, P).
@@ -322,9 +315,8 @@ chldDfs([C | Chld], Vis, P) :- nod(C), arc(C, CChld),
 % bfs/3
 % bfs(+Q, +Vis, -Path)
 bfs([], _, Path) :- Path = [].
-bfs([N | Q], Vis, P) :- nod(N), \+ arc(N, _),
-                        bfs(Q, [N | Vis], Pold), P = [N | Pold].
-bfs([N | Q], Vis, P) :- nod(N), arc(N, X), append(Q, X, Qnew),
+bfs([N | Q], Vis, P) :- \+ arc(N, _), bfs(Q, [N | Vis], Pold), P = [N | Pold].
+bfs([N | Q], Vis, P) :- arc(N, X), append(Q, X, Qnew),
                         bfs(Qnew, [N | Vis], Pold), P = [N | Pold].
 
 check3 :- tests([
@@ -385,43 +377,32 @@ edges(8, [3, 8, 9]). edges(6, [2, 5, 9, 10]).
 % copil d, este reprezentat ca [a, [b, [d]], [c]].
 span(Trees) :- graph(NN), spanTraverse(NN, [], Trees).
 
-%spanBfs(_, [], _, Path) :- Path = [].
-%spanBfs(NN, [N | Q], Vis, P) :- member(N, NN), member(N, Vis),
-%                                spanBfs(NN, Q, Vis, P).
-%spanBfs(NN, [N | Q], Vis, P) :- member(N, NN), \+ member(N, Vis), \+ edges(N, _),
-%                                spanBfs(NN, Q, [N | Vis], Pold), P = [N | Pold].
-%spanBfs(NN, [N | Q], Vis, P) :- member(N, NN), \+ member(N, Vis),
-%                                edges(N, X), append(Q, X, Qnew),
-%                                spanBfs(NN, Qnew, [N | Vis], Pold), P = [N | Pold].
-
-% spanPreorder/5
-% spanPreorder(+NN, +N, +Visited, -NewVis, -Tree)
-spanPreorder(NN, N, Vis, NewVis, Tree) :- member(N, NN), edges(N, Chld),
+spanPreorder(NN, N, Vis, NewVis, Tree) :- edges(N, Chld),
                                           spanDfs(NN, Chld, Vis, ChldVis, ChldTree),
                                           NewVis = [N | ChldVis], Tree = [N | ChldTree].
-spanPreorder(NN, N, Vis, NewVis, Tree) :- member(N, NN), \+ edges(N, _), Tree = [N],
-                                        NewVis = [N | Vis].
+spanPreorder(_, N, Vis, [N | Vis], [N]).
 
-% spanDfs/5
-% spanDfs(+NN, +Chld, +Visited, -NewVis, -Path)
-spanDfs(_, [], Vis, NewVis, P) :- P = [], NewVis = Vis.
-spanDfs(NN, [C | Chld], Vis, NewVis, P) :- member(C, NN), member(C, Vis),
-                                           spanDfs(NN, Chld, Vis, NewVis, P).
-spanDfs(NN, [C | Chld], Vis, NewVis, P) :- member(C, NN), \+ edges(C, _),
+spanDfs(_, [], Vis, Vis, []).
+spanDfs(NN, [C | Chld], Vis, NewVis, P) :- member(C, Vis), spanDfs(NN, Chld, Vis, NewVis, P).
+spanDfs(NN, [C | Chld], Vis, NewVis, P) :- \+ edges(C, _),
                                            spanDfs(NN, Chld, [C | Vis], NewVis, PChld),
-                                           P = [C | PChld].
-spanDfs(NN, [C | Chld], Vis, NewVis, P) :- member(C, NN), edges(C, CChld),
+                                           P = [[C] | PChld].
+spanDfs(NN, [C | Chld], Vis, NewVis, [P]) :- edges(C, CChld),
                                            spanDfs(NN, CChld, [C | Vis], ChldVis, PChld),
-                                           spanDfs(NN, Chld, ChldVis, NewVis, Pdfs),
-                                           Pnew = [PChld | Pdfs], P = [C | Pnew].
+                                           spanDfs(NN, Chld, [C | ChldVis], NewVis, Pdfs),
+                                           append(PChld, Pdfs, Pnew), P = [C | Pnew].
 
-spanTraverse(NN, NN, Trees) :- Trees = [].
+spanTraverse(NN, NN, []).
 spanTraverse(NN, Visited, Trees) :- member(X, NN), \+ member(X, Visited),
-                                    spanPreorder(NN, X, Visited, PreVis, Tree),
-                                    append(Visited, PreVis, NewVis),
+                                    spanPreorder(NN, X, [X | Visited], PreVis, Tree),
+                                    append([X | Visited], PreVis, NewVis),
                                     sort(NewVis, SNewVis),
                                     spanTraverse(NN, SNewVis, NewTrees),
                                     Trees = [Tree | NewTrees].
+
+%% dfs(CrtN, [], Vis, [CrtN | Vis], [CrtN]) :- \+ member(CrtN, Vis), !.
+%% dfs(CrtN, [], Vis, [Vis], []).
+%% dfs(CrtN, [Chld], Vis, )
 
 %spanPreorder(NN, N, Vis, NewVis, Tree) :- member(N, NN), edges(N, _),
 %                                          spanDfs(NN, N, Vis, ChldVis, Tree),
@@ -443,7 +424,7 @@ spanTraverse(NN, Visited, Trees) :- member(X, NN), \+ member(X, Visited),
 %                                    Trees = [Tree | NewTrees].
 
 check5 :- tests([
-          exp('span(Trees)', ['Trees', [[1,[2],[10]],[3,[5,[6,[9]]],[8]],[4,[7]]]])
+          exp('span(Trees)', ['Trees', [[1,[2],[10]],[3,[5,[6,[9]],[8]]],[4,[7]]]])
           ]).
 
 
