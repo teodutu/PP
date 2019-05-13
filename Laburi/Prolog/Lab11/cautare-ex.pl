@@ -149,18 +149,18 @@ next_state(taran, state(MalTaran1, Cine1), state(MalTaran2, Cine2)) :-
 %% vizualizați soluțiile cu
 % solve(taran, Sol), validSol(taran, Sol).
 
-% setPlus(+A, +B, -Result)
-% concatenează A și B în Result (Atenție! nu elimină duplicate).
-setPlus(A, B, Result) :- append(A, B, Result).
+% setPlus(+A, +B, -Path)
+% concatenează A și B în Path (Atenție! nu elimină duplicate).
+setPlus(A, B, Path) :- append(A, B, Path).
 
 % subSet(+Smaller, +Bigger)
 % Verifică dacă setul Smaller este inclus în sau egal cu setul Bigger.
 subSet(A, B) :- forall(member(X, A), member(X, B)).
 
-% setMinus(+From, +ToRemove, -Result)
+% setMinus(+From, +ToRemove, -Path)
 % Produce în result lista elementelor din From care nu sunt în ToRemove.
-setMinus(From, ToRemove, Result) :-
-        findall(E, (member(E, From), \+ member(E, ToRemove)), Result).
+setMinus(From, ToRemove, Path) :-
+        findall(E, (member(E, From), \+ member(E, ToRemove)), Path).
 
 
 %% Problema Misionarilor și Canibalilor
@@ -340,11 +340,11 @@ nodes(NN) :- findall(N, nod(N), NN).
 trees(Trees) :- nodes(NN), sort(NN, Nodes), traverse(Nodes, [], Trees).
 
 % traverse/3
-% traverse(+Nodes, +Visited, -Trees)
+% traverse(+Nodes, +Vis, -Trees)
 traverse(NN, NN, Trees) :- Trees = [].
-traverse(NN, Visited, Trees) :- nod(X), \+ member(X, Visited),
+traverse(NN, Vis, Trees) :- nod(X), \+ member(X, Vis),
                                 preorder(X, Tree),
-                                append(Visited, Tree, NewVis),
+                                append(Vis, Tree, NewVis),
                                 sort(NewVis, SNewVis),
                                 traverse(NN, SNewVis, NewTrees),
                                 Trees = [Tree | NewTrees].
@@ -375,33 +375,21 @@ edges(8, [3, 8, 9]). edges(6, [2, 5, 9, 10]).
 % sale copii.
 % E.g. Arborele cu a rădăcină, având pe b și c copii, iar b având un
 % copil d, este reprezentat ca [a, [b, [d]], [c]].
-span(Trees) :- graph(NN), spanTraverse(NN, [], Trees).
+span(Trees) :- findall(N, (graph(NN), member(N, NN), edges(N, _)), NN),
+               dfs(NN, [], Trees).
 
-spanPreorder(NN, N, Vis, NewVis, Tree) :- edges(N, Chld),
-                                          spanDfs(NN, Chld, Vis, ChldVis, ChldTree),
-                                          NewVis = [N | ChldVis], Tree = [N | ChldTree].
-spanPreorder(_, N, Vis, [N | Vis], [N]).
-
-spanDfs(_, [], Vis, Vis, []).
-spanDfs(NN, [C | Chld], Vis, NewVis, P) :- member(C, Vis), spanDfs(NN, Chld, Vis, NewVis, P).
-spanDfs(NN, [C | Chld], Vis, NewVis, P) :- \+ edges(C, _),
-                                           spanDfs(NN, Chld, [C | Vis], NewVis, PChld),
-                                           P = [[C] | PChld].
-spanDfs(NN, [C | Chld], Vis, NewVis, [P]) :- edges(C, CChld),
-                                           spanDfs(NN, CChld, [C | Vis], ChldVis, PChld),
-                                           spanDfs(NN, Chld, [C | ChldVis], NewVis, Pdfs),
-                                           append(PChld, Pdfs, Pnew), P = [C | Pnew].
-
-spanTraverse(NN, NN, []).
-spanTraverse(NN, Visited, Trees) :- member(X, NN), \+ member(X, Visited),
-                                    spanPreorder(NN, X, [X | Visited], PreVis, Tree),
-                                    append([X | Visited], PreVis, NewVis),
-                                    sort(NewVis, SNewVis),
-                                    spanTraverse(NN, SNewVis, NewTrees),
-                                    Trees = [Tree | NewTrees].
+dfs([], _, []).
+dfs(N, Vis, [N]) :- graph(NN), member(N, NN), (member(N, Vis), !; \+ edges(N, _)).
+dfs(N, Vis, [N | Path]) :- graph(NN), member(N, NN), edges(N, L),
+                           dfs(L, [N | Vis], Path).
+dfs([N | NN], Vis, Path) :- member(N, Vis), dfs(NN, Vis, Path).
+dfs([N | NN], Vis, Path) :- dfs(N, Vis, Path1), append(Vis, Path1, Vis1),
+                            flatten(Vis1, Vis1FLat),
+                            dfs(NN, Vis1FLat, Path2),
+                            Path = [Path1 | Path2].
 
 check5 :- tests([
-          exp('span(Trees)', ['Trees', [[1,[2],[10]],[3,[5,[6,[9]],[8]]],[4,[7]]]])
+          exp('span(Trees)', ['Trees', [[1,[2],[10]],[3,[5,[6,[9]]],[8]],[4,[7]]]])
           ]).
 
 
@@ -778,8 +766,8 @@ testSet(Ex, Text, TypeText, SetG, SetE) :- msort(SetG, SetGSorted),
                 [Text, TypeText, SetG, SetE, M1]), failure(Ex, M)
     ).
 
-testSetMinus(From, ToRemove, Result) :-
-        findall(E, (member(E, From), \+ member(E, ToRemove)), Result).
+testSetMinus(From, ToRemove, Path) :-
+        findall(E, (member(E, From), \+ member(E, ToRemove)), Path).
 
 getVal(Var, [Var=Val | _], Val) :- !.
 getVal(Var, [_ | Vars], Val) :- getVal(Var, Vars, Val).
