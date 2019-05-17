@@ -113,7 +113,7 @@ check3:- tests([
              exp('au_marca(bmw, NuSemnalizeaza)', [set('NuSemnalizeaza', [bogdan, cosmin, eugen])]),
              exp('au_marca(dacia, ConducDacie)', [set('ConducDacie', [florin, irina])]),
              exp('au_marca(seat, ConducSeat)', [set('ConducSeat', [laura])]),
-             exp('findall(_, au_marca(X,Y), L)',  [cond(length(L, 9))])
+             exp('findall(_, au_marca(X,Y), L)',  [cond(length(_, 9))])
           ]).
 
 % ----------------------------------------------------------------------------
@@ -136,7 +136,7 @@ check4:- tests([
 % armelor deținute de conducători de mașini de tipul Marca.
 exercitiul(5, [1.5, puncte]).
 
-arme_marca(Marca, ListaArme) :- setof(Arma, Nume^(conduce(Nume, Marca), inarmat(Nume, Arma)), ListaArme).
+arme_marca(Marca, ListaArme) :- setof(Arma, Nume ^ (conduce(Nume, Marca), inarmat(Nume, Arma)), ListaArme).
 
 check5:- tests([
              exp('arme_marca(bmw, ArmeBmw)', [set('ArmeBmw', [arbaleta, grenada, pistol])]),
