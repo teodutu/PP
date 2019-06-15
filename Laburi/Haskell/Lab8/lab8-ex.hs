@@ -302,7 +302,7 @@ appendDL xs ys = DL (listMaker xs . listMaker ys)
 headDL :: DList a -> Maybe a
 headDL diffList
   | null list == True = Nothing
-  | otherwise        = Just $ head list
+  | otherwise         = Just $ head list
   where
     list = dlToList diffList
 
