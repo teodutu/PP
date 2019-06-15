@@ -12,6 +12,14 @@ Paradigme de Programare - UPB 2019
 
 - Lab4 (**Racket**): inchideri functionale si variable
 
+- Lab5 (**Racket**): fluxuri
+
+- Lab6 (**Haskell**): introducere (autismul incepe)
+
 ## Teme
 
-- ???
+- interpretor de *Python* (**Racket**): 16.03.2019 - 03.04.2019
+
+- jocul *Bloxorz* (**Haskell**): 03.04.2019 - 26.04.2019
+
+- **Prolog** = nope

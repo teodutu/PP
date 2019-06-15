@@ -5,8 +5,8 @@ import TestPP
 import Data.Char
 
 {-
-Pentru stack rula întreaga suită de teste executați "runAllTests" din ghci.
-Pentru stack rula doar testul pentru exercițiul X executați "checkX" din ghci.
+Pentru a rula întreaga suită de teste executați "runAllTests" din ghci.
+Pentru a rula doar testul pentru exercițiul X executați "checkX" din ghci.
 
 Expresia `undefined` are orice tip, dar nu poate fi evaluată.
 -}
@@ -15,15 +15,15 @@ Expresia `undefined` are orice tip, dar nu poate fi evaluată.
 1. (1p)
 Implementați funcția `unzip2`
 -}
-unzip2  :: [(stack, b)] -> ([stack], [b])
+unzip2  :: [(a, b)] -> ([a], [b])
 unzip2 [] = ([], [])
-unzip2 ((stack, b) : xs) = (stack : (fst (unzip2 xs)), b : (snd (unzip2 xs)))
+unzip2 ((a, b) : xs) = (a : (fst (unzip2 xs)), b : (snd (unzip2 xs)))
 
 -- Verificare: check1
 check1 :: TestPP ()
 check1 = do
   assertVal "[1] unzip2 (zip)" 1 $ -- 1p
-    unzip2 (zip [1,2,3] ["stack","b","c"]) == ([1,2,3], ["stack","b","c"])
+    unzip2 (zip [1,2,3] ["a","b","c"]) == ([1,2,3], ["a","b","c"])
 
 {-
 2. (1p)
@@ -45,33 +45,33 @@ check2 = do
 3. (3p)
 Implementați, folosind obligatoriu list-comprehensions, operații pe mulțimi:
 intersecție, diferență, produs cartezian. Utilizați ulterior funcțiile definite anterior
-pentru stack reprezenta reuniunea mulțimilor.
+pentru a reprezenta reuniunea mulțimilor.
 -}
-setIntersection :: Eq stack => [stack] -> [stack] -> [stack]
-setIntersection stack b = [x | x <- stack, elem x b]
+setIntersection :: Eq a => [a] -> [a] -> [a]
+setIntersection a b = [x | x <- a, elem x b]
 
-setDiff :: Eq stack => [stack] -> [stack] -> [stack]
-setDiff stack b = [x | x <- stack, not (elem x b)]
+setDiff :: Eq a => [a] -> [a] -> [a]
+setDiff a b = [x | x <- a, not (elem x b)]
 
-cartProduct :: [stack] -> [b] -> [(stack, b)]
-cartProduct stack b = [(x, y) | x <- stack, y <- b]
+cartProduct :: [a] -> [b] -> [(a, b)]
+cartProduct a b = [(x, y) | x <- a, y <- b]
 
-setUnion :: Eq stack => [stack] -> [stack] -> [stack]
-setUnion stack b = setDiff stack b ++ b
+setUnion :: Eq a => [a] -> [a] -> [a]
+setUnion a b = setDiff a b ++ b
 
 -- Verificare: check4
 check3 :: TestPP ()
 check3 = do
   assertVal "[3] cartProduct" 0.5 $ -- 0.5p
     cartProduct [1, 2] [3, 4, 5] == [(1, 3), (1, 4), (1, 5), (2, 3), (2, 4), (2, 5)]
-  let stack = [1, 7, 3, 6, 2]
+  let a = [1, 7, 3, 6, 2]
       b = [2, 8, 6, 10, 4, 1]
   assertVal "[3] setIntersection" 0.75 $ -- 0.75p
-    sort (setIntersection stack b) == [1, 2, 6]
+    sort (setIntersection a b) == [1, 2, 6]
   assertVal "[3] setDiff" 0.75 $ -- 0.75p
-    sort (setDiff stack b) == [3, 7]
+    sort (setDiff a b) == [3, 7]
   assertVal "[3] setUnion" 1 $ -- 1p
-    sort (setUnion stack b) == [1, 2, 3, 4, 6, 7, 8, 10]
+    sort (setUnion a b) == [1, 2, 3, 4, 6, 7, 8, 10]
 
 {-
 4. (1.5p)
@@ -79,7 +79,7 @@ Implementați o funcție ce grupează elementele egale ale unei liste în liste 
 Funcția ar trebui să aibă același comportament cu Data.List.group:
 http://zvon.org/other/haskell/Outputlist/group_f.html
 -}
-group2 :: Eq stack => [stack] -> [[stack]]
+group2 :: Eq a => [a] -> [[a]]
 group2 [] = []
 group2 (x : xs) =
   let (equal, rest) = span (== x) xs
@@ -91,7 +91,6 @@ check4 =
   assertVal "[4] group" 1.5 $ -- 1.5p
     group2 [1,1,1,3,2,2,3,3,2,2,5,5,1] == [[1,1,1],[3],[2,2],[3,3],[2,2],[5,5],[1]]
 
-
 {-
 5. (1.5p)
 Găsiţi numărul de apariţii ale fiecărui element dintr-o listă în lista respectivă. 
@@ -101,9 +100,9 @@ Cum rezultatul va fi similar unui dicţionar, chiar dacă un element va apărea 
 va trebui să fie prezent într-o singură pereche în dicţionar.
   
 Hint: S-ar putea să aveți nevoie de funcții auxiliare. Puteți folosi "group2" de mai sus pentru
-stack grupa elementele egale în liste separate şi "sort" pentru stack sorta o listă. 
+a grupa elementele egale în liste separate şi "sort" pentru a sorta o listă. 
 -}
-nrOcc :: Ord stack => [stack] -> [(stack, Int)]
+nrOcc :: Ord a => [a] -> [(a, Int)]
 nrOcc = map (\ x -> ((head x), (length x))) . group2 . sort
 
 -- Verificare: check5
@@ -212,7 +211,7 @@ formată din șiruri ce conțin literele de la 'A' pană la cea dată, astfel:
 "    A    "
 ]
 
-Pentru stack obține litera imediat predecesoare altei litere puteți folosi funcția "pred".
+Pentru a obține litera imediat predecesoare altei litere puteți folosi funcția "pred".
 Funcția "prettyPrint" este utilă pentru vizualizarea rezultatului în forma de mai sus.
 
 -}

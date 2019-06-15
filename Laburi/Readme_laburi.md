@@ -21,3 +21,11 @@
 ## Lab4 (Racket)
 
 - legari de variabile si inchideri functionale (in mare parte in contexte inutile)
+
+## Lab5 (Racket)
+
+- fluxuri (aka simulator de *Haskell*)
+
+## Lab6 (Haskell)
+
+- introducere
