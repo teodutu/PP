@@ -29,3 +29,11 @@
 ## Lab6 (Haskell)
 
 - introducere
+
+## Lab7 (Haskell)
+
+- tot un fel de introducere
+
+## Lab8 (Haskell)
+
+- tipuri de date

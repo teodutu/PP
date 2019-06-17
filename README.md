@@ -16,6 +16,10 @@ Paradigme de Programare - UPB 2019
 
 - Lab6 (**Haskell**): introducere (autismul incepe)
 
+- Lab7 (**Haskell**): tot introducere
+
+- Lab8 (**Haskell**): tipuri de date
+
 ## Teme
 
 - interpretor de *Python* (**Racket**): 16.03.2019 - 03.04.2019
