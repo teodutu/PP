@@ -98,3 +98,31 @@ de-al doilea.
     - `subTree :: (Ord a, Eq a) => BST a -> a -> a -> Maybe (BST a)`;
 
     - `inorder :: BST a -> [a]`.
+
+## data Tree
+
+- implementeaza un arbore impreuna cu functii de parcurgere a acestuia.
+
+### mapTree :: (a -> b) -> Tree a -> Tree b
+
+- aplica o functie pe toate valorile din nodurile arborelui.
+
+### flattenTree :: Tree a -> [a]
+
+- la fel ca `flatten` pentru `SList`: transforma arborele intr-o lista continandu-i toate nodurile.
+
+### foldlTree :: (b -> a -> b) -> b -> Tree a -> b
+
+- ca si cum s-ar aplica un `foldl` pe `flattenTree tree`;
+
+- chiar asa e implementat.
+
+## newtype DList a
+
+- o mizerie de lista (*difference list*) ce nu isi cunoaste mereu toate elementele din coada
+
+- se bazeaza pe variabila din constructorul de date: `listMaker :: [a] -> [a] `, ce reprezinta o functie ce
+transforma o lista in alta lista;
+
+- datorita evaluarii lenese, elementele listei nu sunt cunoscute pana cand nu se transforma `DList`-ul
+intr-o lista clasica.
