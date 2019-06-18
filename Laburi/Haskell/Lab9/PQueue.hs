@@ -405,6 +405,7 @@ showLeftist dashes (Empty _) = dashes ++ "empty\n"
 showLeftist dashes (Node _ val left right) = dashes ++ (show val) ++ "\n" ++ leftShow ++ rightShow
   where
     leftShow = (showLeftist newDashes left)
+
     rightShow = (showLeftist newDashes right)
     newDashes = dashes ++ "--"
 

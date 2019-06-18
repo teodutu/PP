@@ -20,7 +20,9 @@ Paradigme de Programare - UPB 2019
 
 - Lab8 (**Haskell**): tipuri de date
 
-## Teme
+- Lab9 (**Haskell**): clase si instantieri
+
+## Tem
 
 - interpretor de *Python* (**Racket**): 16.03.2019 - 03.04.2019
 

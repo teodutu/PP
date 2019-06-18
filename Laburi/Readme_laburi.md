@@ -37,3 +37,9 @@
 ## Lab8 (Haskell)
 
 - tipuri de date
+
+## Lab9 (Haskell)
+
+- clase + instantieri
+
+- [Leftist Tree](https://en.wikipedia.org/wiki/Leftist_tree)
