@@ -53,3 +53,7 @@
 - se rezolva diverse probleme prin cautare in spatiul starilor
 
 - cautarea este facuta prin **backtracking**
+
+## Lab12 (Prolog)
+
+- rezolvarea unei probleme de logica in prolog;

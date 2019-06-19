@@ -26,6 +26,8 @@ Paradigme de Programare - UPB 2019
 
 - Lab11 (**Prolog**): autism maxim
 
+- Lab12 (**Prolog**): laba
+
 ## Tem
 
 - interpretor de *Python* (**Racket**): 16.03.2019 - 03.04.2019

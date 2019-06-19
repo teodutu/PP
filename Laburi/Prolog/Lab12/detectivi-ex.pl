@@ -30,6 +30,11 @@
 % ----------------------------------------------------------------------------
 % Mașini
 
+f(X, XO) :- XO is X + 1.
+
+mapF([], []).
+mapF([H | T], [F | R]) :- f(H, F), mapF(T, R).
+
 conduce(aurel, ford).
 conduce(bogdan, bmw).
 conduce(cosmin, bmw).
