@@ -380,8 +380,7 @@ span(Trees) :- findall(N, (graph(NN), member(N, NN), edges(N, _)), NN),
 
 dfs([], _, []).
 dfs(N, Vis, [N]) :- graph(NN), member(N, NN), (member(N, Vis), !; \+ edges(N, _)).
-dfs(N, Vis, [N | Path]) :- graph(NN), member(N, NN), edges(N, L),
-                           dfs(L, [N | Vis], Path).
+dfs(N, Vis, [N | Path]) :- edges(N, L), dfs(L, [N | Vis], Path).
 dfs([N | NN], Vis, Path) :- member(N, Vis), dfs(NN, Vis, Path).
 dfs([N | NN], Vis, Path) :- dfs(N, Vis, Path1), append(Vis, Path1, Vis1),
                             flatten(Vis1, Vis1FLat),

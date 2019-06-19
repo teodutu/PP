@@ -47,3 +47,9 @@
 ## Lab10 (Prolog)
 
 - introducere = aplicatii simple pe liste si arbori
+
+## Lab11 (Prolog)
+
+- se rezolva diverse probleme prin cautare in spatiul starilor
+
+- cautarea este facuta prin **backtracking**

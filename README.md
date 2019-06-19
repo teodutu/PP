@@ -22,7 +22,9 @@ Paradigme de Programare - UPB 2019
 
 - Lab9 (**Haskell**): clase si instantieri
 
-- Lab10 (**Prolog**) introducere aka cancerul incepe
+- Lab10 (**Prolog**): introducere aka cancerul incepe
+
+- Lab11 (**Prolog**): autism maxim
 
 ## Tem
 
