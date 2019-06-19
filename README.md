@@ -28,7 +28,7 @@ Paradigme de Programare - UPB 2019
 
 - Lab12 (**Prolog**): laba
 
-## Tem
+## Teme
 
 - interpretor de *Python* (**Racket**): 16.03.2019 - 03.04.2019
 
