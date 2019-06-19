@@ -43,3 +43,7 @@
 - clase + instantieri
 
 - [Leftist Tree](https://en.wikipedia.org/wiki/Leftist_tree)
+
+## Lab10 (Prolog)
+
+- introducere = aplicatii simple pe liste si arbori

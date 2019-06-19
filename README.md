@@ -22,6 +22,8 @@ Paradigme de Programare - UPB 2019
 
 - Lab9 (**Haskell**): clase si instantieri
 
+- Lab10 (**Prolog**) introducere aka cancerul incepe
+
 ## Tem
 
 - interpretor de *Python* (**Racket**): 16.03.2019 - 03.04.2019
